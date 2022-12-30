@@ -10,8 +10,17 @@ public class EmployeeWage {
     static int empWage = 0;
     static int totalEmpHr = 0;
     static int totalDay = 0;
-    public static void compute(String companyName, int wagePerHR, int totalWorkingdays, int totalWorkingHR) {
-        System.out.println("Company name : "+companyName+"\n\n");
+    static String companyName;
+    static int wagePerHR;
+    static int totalWorkingdays;
+    static int totalWorkingHR;
+
+    static int present, absent;
+    static int count;
+    static int option;
+    static String computedResult;
+    Scanner sc = new Scanner(System.in);
+    public String compute() {
         do
         {
             //new operator creates an object from the class by allocating memory for the new object and returning a reference to thet memory
@@ -20,57 +29,43 @@ public class EmployeeWage {
             if (attendCheck == fullTime)
             {
                 empHr = 8;
-                System.out.println("Full time employee");
+                present++;
             }
             else if (attendCheck == partTime)
             {
                 empHr = 4;
-                System.out.println("Part time employee");
+                present++;
             }
             else
             {
                 empHr = 0;
-                System.out.println("The employee is absent");
+                absent++;
             }
             totalEmpHr = totalEmpHr + empHr;
             empWage = empHr * wagePerHR;
-            System.out.println("Employee wage is "+empWage);
             totalDay++;
         } while (totalEmpHr <= totalWorkingHR && totalDay < totalWorkingdays);
-        System.out.println("The total working days per month is "+totalWorkingdays+" and total working hours is "+totalEmpHr);
         empWage = totalEmpHr * wagePerHR;
-        System.out.println("Employee wage is "+empWage);
-        totalEmpHr = 0; // resetting the loop in order to repeat the same for other companies
-        totalDay = 0;
+        return "Company name: "+companyName+"\nThe total working days per month is "+present+", absent for "+absent
+                +" days and total working hours is "+totalEmpHr
+                +"\nEmployee wage for the month is "+empWage;
+    }
+    public void employeeWageBuilder() {
+            System.out.println("Enter the company name");
+            companyName = sc.next();
+            System.out.println("Enter the wage per hour");
+            wagePerHR = sc.nextInt();
+            System.out.println("Enter total number of working days in a month");
+            totalWorkingdays = sc.nextInt();
+            System.out.println("Enter the max working hours");
+            totalWorkingHR = sc.nextInt();
+            computedResult = compute();
     }
 
     public static void main(String[] args) {
         System.out.println("welcome to employee wage computation program");
-        System.out.println("Press 0 If you wish to enter the details manually\npress 1 if you wish to compute the predefined details");
-        Scanner sc = new Scanner(System.in);
-        int option = sc.nextInt();
-        if(option == 0) {
-            System.out.println("Enter the number of company details need to be computed");
-            int count = sc.nextInt();
-            for(int i = 0; i < count; i++) {
-                System.out.println("Enter the details of company "+(i+1)+" :");
-                System.out.println("Enter the company name");
-                String comName = sc.next();
-                System.out.println("Enter the wage per hour");
-                int wagePerHr = sc.nextInt();
-                System.out.println("Enter total number of working days in a month");
-                int totalWorkingDays = sc.nextInt();
-                System.out.println("Enter the max working hours");
-                int maxWorkHr = sc.nextInt();
-                EmployeeWage.compute(comName, wagePerHr, totalWorkingDays, maxWorkHr);
-            }
-        }
-        else if(option == 1) {
-            EmployeeWage.compute("TCS", 20, 22, 100);
-            EmployeeWage.compute("Cognizant", 22, 20, 90);
-            EmployeeWage.compute("Zoho", 25, 24, 80);
-        }
-        else
-            System.out.println("Invalid option");
+        EmployeeWage emp = new EmployeeWage();
+        emp.employeeWageBuilder();
+        System.out.println(computedResult);
     }
 }
