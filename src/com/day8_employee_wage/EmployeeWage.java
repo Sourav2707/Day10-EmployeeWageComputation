@@ -6,20 +6,20 @@ import java.util.Scanner;
 public class EmployeeWage {
     static int fullTime = 1;
     static int partTime = 2;
-    static int empHr = 0;
-    static int empWage = 0;
-    static int totalEmpHr = 0;
-    static int totalDay = 0;
-    static String companyName;
-    static int wagePerHR;
-    static int totalWorkingdays;
-    static int totalWorkingHR;
+     int empHr = 0;
+     int empWage = 0;
+     int totalEmpHr = 0;
+     int totalDay = 0;
+     String companyName;
+     int wagePerHR;
+     int totalWorkingdays;
+     int totalWorkingHR;
 
-    static int present, absent;
-    static int count;
-    static int option;
-    static String computedResult;
+    int present = 0, absent = 0, halfday = 0;
+     int option;
+     String computedResult;
     Scanner sc = new Scanner(System.in);
+    CompanyEmpWage company = new CompanyEmpWage();
     public String compute() {
         do
         {
@@ -34,7 +34,7 @@ public class EmployeeWage {
             else if (attendCheck == partTime)
             {
                 empHr = 4;
-                present++;
+                halfday++;
             }
             else
             {
@@ -47,25 +47,84 @@ public class EmployeeWage {
         } while (totalEmpHr <= totalWorkingHR && totalDay < totalWorkingdays);
         empWage = totalEmpHr * wagePerHR;
         return "Company name: "+companyName+"\nThe total working days per month is "+present+", absent for "+absent
-                +" days and total working hours is "+totalEmpHr
+                +" Halfday present for "+halfday+" days and total working hours is "+totalEmpHr
                 +"\nEmployee wage for the month is "+empWage;
     }
-    public void employeeWageBuilder() {
-            System.out.println("Enter the company name");
-            companyName = sc.next();
-            System.out.println("Enter the wage per hour");
-            wagePerHR = sc.nextInt();
-            System.out.println("Enter total number of working days in a month");
-            totalWorkingdays = sc.nextInt();
-            System.out.println("Enter the max working hours");
-            totalWorkingHR = sc.nextInt();
-            computedResult = compute();
+    public void tcsEmployeeWageBuilder() {
+        companyName = "TCS";
+        System.out.println("Enter the wage per hour");
+        wagePerHR = sc.nextInt();
+        System.out.println("Enter total number of working days in a month");
+        totalWorkingdays = sc.nextInt();
+        System.out.println("Enter the max working hours");
+        totalWorkingHR = sc.nextInt();
+        computedResult = compute();
+        company.companies.add(computedResult);
+    }
+    public void infosysEmployeeWageBuilder() {
+        companyName = "Infosys";
+        System.out.println("Enter the wage per hour");
+        wagePerHR = sc.nextInt();
+        System.out.println("Enter total number of working days in a month");
+        totalWorkingdays = sc.nextInt();
+        System.out.println("Enter the max working hours");
+        totalWorkingHR = sc.nextInt();
+        computedResult = compute();
+        company.companies.add(computedResult);
+    }
+    public void reset() //this method is to reset all the values
+    {
+         empHr = 0;
+         empWage = 0;
+         totalEmpHr = 0;
+         totalDay = 0;
+         companyName = null;
+         wagePerHR = 0;
+         totalWorkingdays = 0;
+         totalWorkingHR = 0;
+
+         present = 0;
+         absent = 0;
+         halfday = 0;
+         option = 0;
+         computedResult = null;
+    }
+    String name;
+    public void menu() {
+        System.out.println("1. Add company 2.Display company details 3.Exit");
+        option = sc.nextInt();
+        if(option == 1) //this is to add company which will call the employee builder
+        {
+            System.out.println("Available companies TCS and Infosys\nEnter the name of the company");
+            name = sc.next();
+            if(name.equalsIgnoreCase("TCS")) {
+                tcsEmployeeWageBuilder();
+            } else if (name.equalsIgnoreCase("Infosys")) {
+                infosysEmployeeWageBuilder();
+            }
+            else {
+                System.out.println("Invalid option");
+            }
+            menu();
+        }
+        else if(option == 2) //will display the computed results
+        {
+            for(int i = 0; i < company.companies.size(); i++) {
+                    System.out.println(company.companies.get(i));
+            }
+            reset();
+            menu();
+        }
+        else if(option == 3) {
+            System.exit(0);
+        }
+        else
+            System.out.println("Invalid data");
     }
 
     public static void main(String[] args) {
         System.out.println("welcome to employee wage computation program");
         EmployeeWage emp = new EmployeeWage();
-        emp.employeeWageBuilder();
-        System.out.println(computedResult);
+        emp.menu();
     }
 }
