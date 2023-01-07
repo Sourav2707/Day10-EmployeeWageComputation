@@ -7,21 +7,25 @@ import java.util.Scanner;
 public class EmployeeWage implements EmployeeWageBuilder{
     static int fullTime = 1;
     static int partTime = 2;
-     int empHr = 0;
-     int empWage = 0;
-     int totalEmpHr = 0;
-     int totalDay = 0;
+     int empHr = 0; //employee hr as per attendance
+     int empWage = 0; //employee wage per day as per attendance
+     int totalEmpHr = 0; //total emp hr for montyh
+     int totalDay = 0; //total days worked as per attendance in a month
      String companyName;
-     int wagePerHR;
-     int totalWorkingdays;
-     int totalWorkingHR;
+     int wagePerHR; //user inpu wage per hr
+     int totalWorkingdays; //user input total working days
+     int totalWorkingHR; //user input total working hrs per month
+     int totalEmpWage; //total emp wage for the month
 
-    int present = 0, absent = 0, halfday = 0;
+    int present = 0, absent = 0, halfday = 0; //to calculate attendance count
      static int option;
      String computedResult;
     Scanner sc = new Scanner(System.in);
     CompanyEmpWage company;
     ArrayList<CompanyEmpWage> companies = new ArrayList<>();
+    String attedance;// will say present or absent
+    ArrayList<String> dailyWage = new ArrayList<>();
+
     public void compute() {
         do
         {
@@ -32,22 +36,26 @@ public class EmployeeWage implements EmployeeWageBuilder{
             {
                 empHr = 8;
                 present++;
+                attedance = "Present";
             }
             else if (attendCheck == partTime)
             {
                 empHr = 4;
                 halfday++;
+                attedance = "Part time";
             }
             else
             {
                 empHr = 0;
                 absent++;
+                attedance = "Absent";
             }
             totalEmpHr = totalEmpHr + empHr;
             empWage = empHr * wagePerHR;
+            dailyWage.add(attedance+" and Wage is "+empWage);
             totalDay++;
-        }while (totalEmpHr < totalWorkingHR && totalDay <= totalWorkingdays);
-        empWage = totalEmpHr * wagePerHR;
+        }while (totalDay <= totalWorkingdays-1 && totalEmpHr < totalWorkingHR); //used - 1 as the count starts from 0
+        totalEmpWage = totalEmpHr * wagePerHR;
     }
     public void employeeWageBuilder() {
         System.out.println("Enter the name of the company");
@@ -59,14 +67,13 @@ public class EmployeeWage implements EmployeeWageBuilder{
         System.out.println("Enter the max working hours");
         totalWorkingHR = sc.nextInt();
         compute();
-        company = new CompanyEmpWage(companyName, present, absent, halfday, totalEmpHr, empWage);
+        company = new CompanyEmpWage(companyName, present, absent, halfday, totalEmpHr, totalEmpWage, totalDay, dailyWage);
         companies.add(company);
-        reset(); //after adding the data to arraylist, this method will reset all the instance variables
     }
     public void reset() //this method is to reset all the values
     {
          empHr = 0;
-         empWage = 0;
+         totalEmpWage = 0;
          totalEmpHr = 0;
          totalDay = 0;
          companyName = null;
@@ -78,14 +85,17 @@ public class EmployeeWage implements EmployeeWageBuilder{
          halfday = 0;
          option = 0;
          computedResult = null;
+         attedance = null;
+         dailyWage.clear();
     }
     public void menu() {
         System.out.println("1. Add company 2.Display company details 3.Exit");
         option = sc.nextInt();
         if (option == 1) //this is to add company which will call the employee builder
         {
-                employeeWageBuilder();
-                menu();
+            reset(); //after adding the data to arraylist, this method will reset all the instance variables
+            employeeWageBuilder();
+            menu();
             }
             else if (option == 2) //will display the computed results
             {
@@ -93,6 +103,9 @@ public class EmployeeWage implements EmployeeWageBuilder{
                 String name = sc.next();
                 for (int i = 0; i < companies.size(); i++) {
                     if(name.equalsIgnoreCase(companies.get(i).getCompanyName())) {
+                        for(String printWage : companies.get(i).getDailyWage()) {
+                            System.out.println(printWage);
+                        }
                         System.out.println(companies.get(i));
                     }
                 }

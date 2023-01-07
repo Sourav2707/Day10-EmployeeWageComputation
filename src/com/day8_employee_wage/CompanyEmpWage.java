@@ -1,20 +1,26 @@
 package com.day8_employee_wage;
 
-public class CompanyEmpWage {
-    private String companyName;
-    private int present;
-    private int absent;
-    private int halfDay;
-    private int totalEmpHr;
-    private int empWage;
+import java.util.ArrayList;
 
-    public CompanyEmpWage(String companyName, int present, int absent, int halfDay, int totalEmpHr, int empWage) {
+public class CompanyEmpWage {
+    private String companyName; //Name of the company to Identify
+    private int present; //this will show the count of present days
+    private int absent; //count absent days
+    private int halfDay; //count of part time
+    private int totalEmpHr; //total employee hours
+    private int totalEmpWage; //total employee wage
+    private int totalDay;
+    private ArrayList <String> dailyWage;
+
+    public CompanyEmpWage(String companyName, int present, int absent, int halfDay, int totalEmpHr, int totalEmpWage, int totalDay, ArrayList<String> dailyWage) {
         this.companyName = companyName;
         this.present = present;
         this.absent = absent;
         this.halfDay = halfDay;
         this.totalEmpHr = totalEmpHr;
-        this.empWage = empWage;
+        this.totalEmpWage = totalEmpWage;
+        this.totalDay = totalDay;
+        this.dailyWage = dailyWage;
     }
 
     public String getCompanyName() {
@@ -57,16 +63,32 @@ public class CompanyEmpWage {
         this.totalEmpHr = totalEmpHr;
     }
 
-    public int getEmpWage() {
-        return empWage;
+    public int getTotalEmpWage() {
+        return totalEmpWage;
     }
 
-    public void setEmpWage(int empWage) {
-        this.empWage = empWage;
+    public void setEmpWage(int totalEmpWage) {
+        this.totalEmpWage = totalEmpWage;
     }
     public String toString() {
-        return "Company name: "+companyName+"\nThe total working days per month is "+present+", absent for "+absent
+        return "Company name: "+companyName+"\nThe total working days per month is "+totalDay+"\nNumber of days present "+present+", absent for "+absent
                 +" Halfday present for "+halfDay+" days and total working hours is "+totalEmpHr
-                +"\nEmployee wage for the month is "+empWage;
+                +"\nEmployee wage for the month is "+totalEmpWage;
+    }
+
+    public int getTotalDay() {
+        return totalDay;
+    }
+
+    public void setTotalDay(int totalDay) {
+        this.totalDay = totalDay;
+    }
+
+    public ArrayList<String> getDailyWage() {
+        return dailyWage;
+    }
+
+    public void setDailyWage(ArrayList<String> dailyWage) {
+        this.dailyWage = dailyWage;
     }
 }
