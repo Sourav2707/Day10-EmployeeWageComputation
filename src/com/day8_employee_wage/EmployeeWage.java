@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class EmployeeWage {
+public class EmployeeWage implements EmployeeWageBuilder{
     static int fullTime = 1;
     static int partTime = 2;
      int empHr = 0;
      int empWage = 0;
      int totalEmpHr = 0;
-     int totalDay = 1;
+     int totalDay = 0;
      String companyName;
      int wagePerHR;
      int totalWorkingdays;
@@ -49,7 +49,7 @@ public class EmployeeWage {
         }while (totalEmpHr < totalWorkingHR && totalDay <= totalWorkingdays);
         empWage = totalEmpHr * wagePerHR;
     }
-    public void EmployeeWageBuilder() {
+    public void employeeWageBuilder() {
         System.out.println("Enter the name of the company");
         companyName = sc.next();
         System.out.println("Enter the wage per hour");
@@ -61,13 +61,14 @@ public class EmployeeWage {
         compute();
         company = new CompanyEmpWage(companyName, present, absent, halfday, totalEmpHr, empWage);
         companies.add(company);
+        reset(); //after adding the data to arraylist, this method will reset all the instance variables
     }
     public void reset() //this method is to reset all the values
     {
          empHr = 0;
          empWage = 0;
          totalEmpHr = 0;
-         totalDay = 1;
+         totalDay = 0;
          companyName = null;
          wagePerHR = 0;
          totalWorkingdays = 0;
@@ -78,14 +79,12 @@ public class EmployeeWage {
          option = 0;
          computedResult = null;
     }
-    String name;
     public void menu() {
         System.out.println("1. Add company 2.Display company details 3.Exit");
         option = sc.nextInt();
         if (option == 1) //this is to add company which will call the employee builder
         {
-                EmployeeWageBuilder();
-                reset();
+                employeeWageBuilder();
                 menu();
             }
             else if (option == 2) //will display the computed results
